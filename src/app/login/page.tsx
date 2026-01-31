@@ -14,7 +14,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { SparklesText } from "@/components/ui/sparkles-text";
 
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
+import { login } from "@/lib/auth";
 
 export default function LoginPage(): JSX.Element {
   const router = useRouter();
@@ -23,37 +24,17 @@ export default function LoginPage(): JSX.Element {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      let data: { message?: string } = {};
-
-      const text = await res.text();
-      if (text) {
-        data = JSON.parse(text);
-      }
-
-      if (!res.ok) {
-        toast.error(data.message ?? "Login gagal");
-        return;
-      }
-
-      toast.success("Login berhasil");
-      router.push("/");
+      await login({ email, password }, router);
     } finally {
       setLoading(false);
     }
   }
-
-
+  
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
       <Toaster richColors position="top-center" />

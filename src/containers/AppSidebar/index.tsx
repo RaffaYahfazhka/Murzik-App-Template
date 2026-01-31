@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { logout } from "@/lib/auth";
+import { useEffect, useState } from "react";
 
 // MENU CONFIG
 const items = [
@@ -38,6 +39,15 @@ const items = [
 const AppSidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const [,setLoggedIn] = useState(false);
+
+  useEffect(() => {
+      fetch("/api/session")
+        .then((res) => res.json())
+        .then((data) => setLoggedIn(data.loggedIn))
+        .catch(() => setLoggedIn(false));
+    }, []);
+  
 
   return (
     <Sidebar>
@@ -71,7 +81,10 @@ const AppSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  onClick={() => logout(router)}
+                  onClick={async () => {
+                    await logout(router);
+                    setLoggedIn(false);
+                  }}
                   className="text-destructive cursor-pointer"
                 >
                   <LogOut />

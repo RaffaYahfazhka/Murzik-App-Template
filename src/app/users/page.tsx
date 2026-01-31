@@ -30,7 +30,7 @@ export default async function UsersPage() {
               </thead>
 
               <tbody>
-                {users.map((user) => (
+                {users.map((user: any) => (
                   <tr
                     key={user.id}
                     className="hover:bg-zinc-50"
