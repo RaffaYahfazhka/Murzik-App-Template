@@ -1,36 +1,144 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Murzik App Template
 
-## Getting Started
+Murzik adalah aplikasi template **Website Landing Page dan Admin** berbasis **Next.js (App Router)** yang menggunakan **Supabase (PostgreSQL)** sebagai database dan **Prisma** sebagai ORM.
 
-First, run the development server:
+Project ini menggunakan **Yarn** sebagai package manager.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🚀 Tech Stack
+
+* **Next.js** (App Router)
+* **React**
+* **TypeScript**
+* **Prisma ORM**
+* **Supabase (PostgreSQL)**
+* **Tailwind CSS**
+* **shadcn/ui**
+
+---
+
+## 📦 Prerequisites
+
+Pastikan sudah ter-install:
+
+* **Node.js** ≥ 18
+* **Yarn**
+* **PostgreSQL (via Supabase)**
+
+---
+
+## ⚙️ Environment Variables
+
+Buat file **`.env`** di root project, lalu isi dengan konfigurasi Supabase berikut:
+
+```env
+# Prisma database configuration
+DATABASE_URL="postgresql://postgres.ahqzanlnbdbadbsrtsmh:YdmiHML2g0dZKcl0@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true&preparedStatements=false"
+
+DIRECT_URL="postgresql://postgres.ahqzanlnbdbadbsrtsmh:YdmiHML2g0dZKcl0@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?pgbouncer=true&preparedStatements=false"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> ⚠️ **Catatan Penting**
+>
+> * `DATABASE_URL` digunakan untuk koneksi pooling (PgBouncer)
+> * `DIRECT_URL` digunakan untuk Prisma migration
+> * Jangan pernah commit file `.env` ke repository public
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧱 Prisma Setup
 
-## Learn More
+Generate Prisma Client:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+yarn prisma generate
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Jalankan migration:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+yarn prisma migrate dev
+```
 
-## Deploy on Vercel
+(Optional) Buka Prisma Studio:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+yarn prisma studio
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## ▶️ Running Development Server
+
+Jalankan server development:
+
+```bash
+yarn dev
+```
+
+Buka browser di:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 📁 Project Structure (Ringkas)
+
+```
+src/
+├─ app/            # App Router (pages, layout, api)
+├─ components/     # Reusable UI components
+├─ containers/     # Navbar, Sidebar, dll
+├─ lib/            # Auth, Prisma, utils
+├─ hooks/          # Custom hooks
+prisma/
+├─ schema.prisma
+```
+
+---
+
+## 🔐 Authentication
+
+* Login menggunakan API route (`/api/login`)
+* Session berbasis **cookie**
+* Logout akan menghapus cookie & refresh server state
+* Proteksi route dapat ditangani via `middleware.ts`
+
+---
+
+## 🚢 Deployment
+
+Disarankan deploy menggunakan **Vercel**:
+
+1. Push repository ke GitHub
+2. Import project ke Vercel
+3. Set environment variables (`DATABASE_URL`, `DIRECT_URL`)
+4. Deploy 🚀
+
+Dokumentasi lengkap:
+
+* [https://nextjs.org/docs/app/building-your-application/deploying](https://nextjs.org/docs/app/building-your-application/deploying)
+
+---
+
+## 📚 References
+
+* Next.js Docs → [https://nextjs.org/docs](https://nextjs.org/docs)
+* Prisma Docs → [https://www.prisma.io/docs](https://www.prisma.io/docs)
+* Supabase Docs → [https://supabase.com/docs](https://supabase.com/docs)
+
+---
+
+## 📝 Notes
+
+Project ini menggunakan **Next.js App Router**, sehingga:
+
+* Perubahan auth (login/logout) perlu `router.refresh()`
+* Server & Client Component dipisah
+
+---
+
+Happy coding ✨
